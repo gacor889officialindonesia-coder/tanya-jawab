@@ -7,9 +7,9 @@ import * as cheerio from "cheerio";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const BOT_TOKEN = process.env.BOT_TOKEN;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite"?.trim();
 const KNOWLEDGE_URL = process.env.KNOWLEDGE_URL || "";
 
 if (!BOT_TOKEN || !GEMINI_API_KEY) {

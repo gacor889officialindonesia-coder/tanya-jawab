@@ -17,7 +17,7 @@ if (!BOT_TOKEN || !GEMINI_API_KEY) {
   process.exit(1);
 }
 
-const bot = new TelegramBot(BOT_TOKEN, { polling: true });
+const bot = new TelegramBot(BOT_TOKEN, { polling: false });
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
 app.get("/", (req, res) => {
@@ -27,6 +27,13 @@ app.get("/", (req, res) => {
 app.get("/ping", (req, res) => {
   console.log(`[${new Date().toLocaleString("id-ID")}] Ping dari UptimeRobot`);
   res.send("pong");
+});
+
+app.use(express.json());
+
+app.post("/webhook", (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
 });
 
 async function ambilKnowledgeDariLink() {
@@ -118,14 +125,20 @@ function keepAliveLog() {
   console.log(`[${new Date().toLocaleString("id-ID")}] 🤖 Bot AI masih hidup`);
 }
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`✅ Server jalan di port ${PORT}`);
   console.log(`✅ Model Gemini: ${GEMINI_MODEL}`);
-  // log tiap 3 jam
+
+  const url = "https://tanya-jawab.onrender.com/webhook";
+
+  await bot.deleteWebHook({ drop_pending_updates: true });
+  await bot.setWebHook(url);
+
+  console.log(`✅ Webhook aktif: ${url}`);
+
   keepAliveLog();
 
   setInterval(() => {
     keepAliveLog();
   }, 3 * 60 * 60 * 1000);
-  
 });

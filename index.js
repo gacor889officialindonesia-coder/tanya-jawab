@@ -9,14 +9,16 @@ const PORT = process.env.PORT || 3000;
 
 const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY?.trim();
+const OPENROUTER_MODEL = "deepseek/deepseek-chat-v3-0324:free";
 const KNOWLEDGE_URL = (process.env.KNOWLEDGE_URL || "").trim();
 
-if (!BOT_TOKEN || !OPENROUTER_API_KEY)
-  console.error("❌ ENV belum lengkap. Isi BOT_TOKEN dan GEMINI_API_KEY di Render.");
+if (!BOT_TOKEN || !OPENROUTER_API_KEY) {
+  console.error("❌ ENV belum lengkap. Isi BOT_TOKEN dan OPENROUTER_API_KEY di Render.");
   process.exit(1);
 }
 
 const bot = new TelegramBot(BOT_TOKEN, { polling: false });
+
 const ai = new OpenAI({
   apiKey: OPENROUTER_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
@@ -111,8 +113,7 @@ Request user:
 ${text}
 `;
 
-const response = await ai.chat.completions.create({
-  model: "deepseek/deepseek-chat-v3-0324:free",
+  model: OPENROUTER_MODEL,
   messages: [
     {
       role: "user",

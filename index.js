@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 
 const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "").trim();
-const KNOWLEDGE_URL = process.env.KNOWLEDGE_URL || "".trim();
+const GEMINI_MODEL = (process.env.GEMINI_MODEL || "gemini-2.0-flash").trim();
+const KNOWLEDGE_URL = (process.env.KNOWLEDGE_URL || "").trim();
 
 if (!BOT_TOKEN || !GEMINI_API_KEY) {
   console.error("❌ ENV belum lengkap. Isi BOT_TOKEN dan GEMINI_API_KEY di Render.");
@@ -116,9 +116,9 @@ ${text}
     await bot.sendMessage(chatId, hasil, {
       disable_web_page_preview: true,
     });
-  } catch (err) {
+   } catch (err) {
     console.error("❌ Error Gemini/Telegram:", err?.message || err);
-    await bot.sendMessage(chatId, "❌ Error bro, coba lagi bentar atau cek ENV GEMINI_API_KEY di Render.");
+    await bot.sendMessage(chatId, `❌ Error asli:\n${err?.message || "Unknown error"}`);
   }
 });
 

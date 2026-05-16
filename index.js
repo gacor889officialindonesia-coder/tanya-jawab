@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY?.trim();
 const OPENROUTER_MODEL =
-  process.env.OPENROUTER_MODEL || "openrouter/free";
+  process.env.OPENROUTER_MODEL || "mistralai/mistral-7b-instruct:free";
 const KNOWLEDGE_URL = (process.env.KNOWLEDGE_URL || "").trim();
 
 if (!BOT_TOKEN || !OPENROUTER_API_KEY) {

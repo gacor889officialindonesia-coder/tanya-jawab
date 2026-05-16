@@ -60,10 +60,13 @@ async function ambilKnowledgeDariLink() {
 
     return text;
   } catch (err) {
-    console.error("❌ Gagal ambil knowledge:", err?.message || err);
-    return "";
+    console.error("❌ Error Gemini/Telegram:", err?.message || err);
+
+    await bot.sendMessage(
+      chatId,
+      "❌ Gemini quota habis bro. Coba ganti GEMINI_API_KEY di Render atau aktifkan billing Google Cloud."
+    );
   }
-}
 
 bot.onText(/\/start/, async (msg) => {
   await bot.sendMessage(

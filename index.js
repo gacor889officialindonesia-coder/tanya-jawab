@@ -140,7 +140,7 @@ function keepAliveLog() {
 
 app.listen(PORT, async () => {
   console.log(`✅ Server jalan di port ${PORT}`);
-  console.log(`✅ Model Gemini: ${GEMINI_MODEL}`);
+  console.log("✅ OpenRouter aktif");
 
   const url = "https://tanya-jawab.onrender.com/webhook";
 

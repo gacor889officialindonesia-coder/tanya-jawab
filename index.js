@@ -1,6 +1,6 @@
 import express from "express";
 import TelegramBot from "node-telegram-bot-api";
-import { GoogleGenAI } from "@google/genai";
+import OpenAI from "openai";
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -8,17 +8,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
-const GEMINI_MODEL = (process.env.GEMINI_MODEL || "gemini-2.0-flash").trim();
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY?.trim();
 const KNOWLEDGE_URL = (process.env.KNOWLEDGE_URL || "").trim();
 
-if (!BOT_TOKEN || !GEMINI_API_KEY) {
+if (!BOT_TOKEN || !OPENROUTER_API_KEY)
   console.error("❌ ENV belum lengkap. Isi BOT_TOKEN dan GEMINI_API_KEY di Render.");
   process.exit(1);
 }
 
 const bot = new TelegramBot(BOT_TOKEN, { polling: false });
-const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+const ai = new OpenAI({
+  apiKey: OPENROUTER_API_KEY,
+  baseURL: "https://openrouter.ai/api/v1",
+});
 
 app.get("/", (req, res) => {
   res.send("Bot AI template jualan aktif ✅");
@@ -109,12 +111,19 @@ Request user:
 ${text}
 `;
 
-    const response = await ai.models.generateContent({
-      model: GEMINI_MODEL,
-      contents: prompt,
-    });
+const response = await ai.chat.completions.create({
+  model: "deepseek/deepseek-chat-v3-0324:free",
+  messages: [
+    {
+      role: "user",
+      content: prompt,
+    },
+  ],
+});
 
-    const hasil = response.text || "Maaf bro, hasilnya kosong. Coba ulangi dengan detail produk.";
+const hasil =
+  response.choices?.[0]?.message?.content ||
+  "Maaf bro, hasil kosong.";
 
     await bot.sendMessage(chatId, hasil, {
       disable_web_page_preview: true,

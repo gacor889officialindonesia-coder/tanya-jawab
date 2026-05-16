@@ -113,6 +113,7 @@ Request user:
 ${text}
 `;
 
+const response = await ai.chat.completions.create({
   model: OPENROUTER_MODEL,
   messages: [
     {

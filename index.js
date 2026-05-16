@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 
 const BOT_TOKEN = process.env.BOT_TOKEN?.trim();
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY?.trim();
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite"?.trim();
-const KNOWLEDGE_URL = process.env.KNOWLEDGE_URL || "";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "").trim();
+const KNOWLEDGE_URL = process.env.KNOWLEDGE_URL || "".trim();
 
 if (!BOT_TOKEN || !GEMINI_API_KEY) {
   console.error("❌ ENV belum lengkap. Isi BOT_TOKEN dan GEMINI_API_KEY di Render.");
@@ -32,6 +32,7 @@ app.get("/ping", (req, res) => {
 app.use(express.json());
 
 app.post("/webhook", (req, res) => {
+  console.log("📩 UPDATE MASUK:", JSON.stringify(req.body));
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
